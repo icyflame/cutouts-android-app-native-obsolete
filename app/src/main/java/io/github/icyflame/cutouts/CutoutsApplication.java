@@ -32,16 +32,8 @@ public class CutoutsApplication extends Application {
         return mRetrofitInstance;
     }
 
-    public void setmRetrofitInstance(Retrofit mRetrofitInstance) {
-        this.mRetrofitInstance = mRetrofitInstance;
-    }
-
     public CutoutsAPI getmApi() {
         return mApi;
-    }
-
-    public void setmApi(CutoutsAPI mApi) {
-        this.mApi = mApi;
     }
 
     @Override
