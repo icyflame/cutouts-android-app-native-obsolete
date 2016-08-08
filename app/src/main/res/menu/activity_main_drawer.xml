@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:enabled="true">
+        <item android:id="@+id/sidebar_register" android:title="REGISTER" />
+        <item android:id="@+id/sidebar_login" android:title="LOGIN" />
+        <item android:id="@+id/sidebar_logout" android:title="LOGOUT" />
+    </group>
+
+</menu>

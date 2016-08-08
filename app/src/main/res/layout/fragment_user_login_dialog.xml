@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="4dp"
+    android:orientation="vertical"
+    tools:context="io.github.icyflame.cutouts.UserLoginDialog">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:text="Login" />
+
+    <EditText
+        android:id="@+id/user_login_dialog_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="USERNAME or EMAIL"
+        android:layout_margin="3dp" />
+
+    <EditText
+        android:id="@+id/user_login_dialog_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="PASSWORD"
+        android:layout_margin="3dp" />
+
+    <Button
+        android:id="@+id/user_login_dialog_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="3dp"
+        android:textSize="20sp"
+        android:text="LOGIN!" />
+</LinearLayout>
