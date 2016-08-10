@@ -21,6 +21,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:text="@string/email_id"
+        android:inputType="textEmailAddress"
         android:hint="USERNAME or EMAIL"
         android:layout_margin="3dp" />
 
@@ -29,6 +31,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:inputType="textPassword"
+        android:text="@string/password"
         android:hint="PASSWORD"
         android:layout_margin="3dp" />
 

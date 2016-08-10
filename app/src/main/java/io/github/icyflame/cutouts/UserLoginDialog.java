@@ -1,5 +1,6 @@
 package io.github.icyflame.cutouts;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.google.gson.JsonObject;
 
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,6 +55,8 @@ public class UserLoginDialog extends DialogFragmentCustom {
                 String username = ((EditText) main.findViewById(R.id.user_login_dialog_username)).getText().toString();
                 String password = ((EditText) main.findViewById(R.id.user_login_dialog_password)).getText().toString();
 
+                Log.d(TAG, "onClick: " + String.format(Locale.US, "Username: %s, Password: %s", username, password));
+
                 final CutoutsApplication appInstance = (CutoutsApplication) UserLoginDialog.this
                         .getActivity()
                         .getApplication();
@@ -61,7 +65,14 @@ public class UserLoginDialog extends DialogFragmentCustom {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
-                        Log.d(TAG, "onResponse: User signin response: " + response.body().toString());
+                        Log.d(TAG, "onResponse: Raw: " + (response.raw() == null ? "NOTHING!" : response.raw().toString()));
+
+                        if (response.code() != 200 || response.body() == null) {
+                            Log.e(TAG, "onResponse: Response didn't end in 200 or had a null response body!");
+                            return;
+                        }
+
+                        Log.d(TAG, "onResponse: User signed in: " + response.body());
 
                         if (response.body().has("res")) {
                             String _sid = response.body().get("res").getAsJsonObject().get("sid").getAsString();
@@ -85,7 +96,7 @@ public class UserLoginDialog extends DialogFragmentCustom {
 
                                 @Override
                                 public void onFailure(Call<JsonObject> call, Throwable t) {
-
+                                    Log.d(TAG, "onFailure: API Response for List articles failed!");
                                 }
                             });
                         }
@@ -93,7 +104,7 @@ public class UserLoginDialog extends DialogFragmentCustom {
 
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
-
+                        Log.d(TAG, "onFailure: API Response for User login failed!");
                     }
                 });
             }
