@@ -16,7 +16,10 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, UserLoginDialog.userLoginResults {
 
     public static final String TAG = "MainActivity";
 
@@ -52,5 +55,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
         return false;
+    }
+
+    @Override
+    public void userLoginDone(boolean result, JsonObject authResponse, JsonArray articlesList) {
+        if (result) {
+            // Login was a success
+            // Have to load the List fragment inside the main content framelayout
+            ArticlesListFragment listArticles = ArticlesListFragment.newInstance(articlesList);
+            ((FrameLayout) findViewById(R.id.main_container)).removeAllViews();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.main_container, listArticles)
+                    .commit();
+        } else {
+            // Login didn't happen properly!
+            // Show a dialog to the user and do nothing after that
+        }
     }
 }

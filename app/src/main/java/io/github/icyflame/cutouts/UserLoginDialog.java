@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.List;
@@ -27,10 +29,16 @@ public class UserLoginDialog extends DialogFragmentCustom {
 
     public static final String TAG = "UserLoginDialogFragment";
 
+    public interface userLoginResults {
+        void userLoginDone(boolean result, JsonObject authResponse, JsonArray articlesList);
+    }
+
+    public userLoginResults mCallback;
+
     public UserLoginDialog() {
         // Required empty public constructor
     }
-    
+
     public static UserLoginDialog newInstance() {
         UserLoginDialog fragment = new UserLoginDialog();
 
@@ -40,6 +48,18 @@ public class UserLoginDialog extends DialogFragmentCustom {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        try {
+            if (getParentFragment() == null) {
+                mCallback = ((userLoginResults) getActivity());
+            } else {
+                mCallback = ((userLoginResults) getParentFragment());
+            }
+        } catch (ClassCastException error) {
+            Log.e(TAG, "onCreate: "
+                    + (getParentFragment() == null ? getActivity().toString() : getParentFragment().toString())
+                    + " must implement the userLoginResults interface.", error);
+        }
     }
 
     @Override
@@ -47,7 +67,7 @@ public class UserLoginDialog extends DialogFragmentCustom {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View main = inflater.inflate(R.layout.fragment_user_login_dialog, container, false);
-        
+
         main.findViewById(R.id.user_login_dialog_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,6 +94,8 @@ public class UserLoginDialog extends DialogFragmentCustom {
 
                         Log.d(TAG, "onResponse: User signed in: " + response.body());
 
+                        final JsonObject authResponse = response.body();
+
                         if (response.body().has("res")) {
                             String _sid = response.body().get("res").getAsJsonObject().get("sid").getAsString();
 
@@ -84,11 +106,15 @@ public class UserLoginDialog extends DialogFragmentCustom {
                                 public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                                     Log.d(TAG, "onResponse: List of articles response: " + response.body().toString());
                                     if (response.body().has("res")) {
-                                        int numArticles = response.body()
-                                                .get("res")
-                                                .getAsJsonArray()
-                                                .size();
-                                        Toast.makeText(UserLoginDialog.this.getActivity(), "Number of articles for this user: " + numArticles, Toast.LENGTH_LONG).show();
+                                        final JsonArray articlesList = response.body()
+                                                .getAsJsonArray("res");
+                                        int numArticles = articlesList.size();
+                                        Toast.makeText(UserLoginDialog.this.getActivity(), "Logged in! Number of articles for this user: " + numArticles, Toast.LENGTH_LONG).show();
+
+                                        UserLoginDialog.this.dismiss();
+
+                                        mCallback.userLoginDone(true, authResponse, articlesList);
+
                                     } else {
                                         Toast.makeText(UserLoginDialog.this.getActivity(), "There was some problem!", Toast.LENGTH_LONG).show();
                                     }
