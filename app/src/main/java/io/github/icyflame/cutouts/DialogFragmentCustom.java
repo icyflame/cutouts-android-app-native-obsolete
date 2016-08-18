@@ -17,7 +17,7 @@ import android.widget.ImageButton;
 
 public class DialogFragmentCustom extends DialogFragment {
 
-    protected double WIDTH_RATIO = 0.5;
+    protected double WIDTH_RATIO = 0.75;
     protected double HEIGHT_RATIO = 1;
 
     @Override

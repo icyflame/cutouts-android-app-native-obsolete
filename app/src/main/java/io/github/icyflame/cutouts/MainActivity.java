@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 UserLoginDialog.newInstance().show(getSupportFragmentManager(), "user.login");
             }
         }
+        ((DrawerLayout) findViewById(R.id.drawer_layout)).closeDrawers();
         return false;
     }
 

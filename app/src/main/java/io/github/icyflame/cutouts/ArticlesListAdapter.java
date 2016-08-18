@@ -7,6 +7,7 @@ package io.github.icyflame.cutouts;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -87,14 +88,22 @@ public class ArticlesListAdapter extends RecyclerView.Adapter<ArticlesListAdapte
 
     @Override
     public void onBindViewHolder(SimpleViewHolder holder, final int position) {
-        holder.title.setText(mItems.get(position)
+        String url = mItems.get(position)
                 .getAsJsonObject()
                 .get("link")
-                .getAsString());
-        holder.authors.setText(mItems.get(position)
+                .getAsString();
+
+        holder.title.setText(Uri.parse(url).getHost());
+
+        String author = mItems.get(position)
                 .getAsJsonObject()
                 .get("author")
-                .getAsString());
+                .getAsString();
+
+        holder.authors.setText("Written by " + author);
+
+        View.OnClickListener listener = mParentCallback.setItemOnClickListener(mItems.get(position).getAsJsonObject());
+        holder.itemView.setOnClickListener(listener);
     }
 
     /*
